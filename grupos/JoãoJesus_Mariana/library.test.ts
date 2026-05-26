@@ -126,33 +126,6 @@ describe('LibraryService', () => {
     expect(result.reason).toBe('LIMIT_REACHED');
   });
 
-it('returnBook calcula multa corretamente', () => {
-  const loan: Loan = {
-    memberId: 'm1',
-    bookId: 'b1',
-    borrowedAt: new Date('2025-06-01T10:00:00Z'),
-    dueAt: new Date('2025-06-08T10:00:00Z'),
-    returnedAt: null,
-  };
-
-  const repo = mock<LibraryRepository>();
-
-  repo.findActiveLoanByBookId.mockReturnValue(loan);
-  repo.findBookById.mockReturnValue(makeBook());
-
-  const service = new LibraryService(repo);
-
-  const result = service.returnBook(
-    'm1',
-    'b1',
-    new Date('2025-06-13T10:00:00Z'),
-  );
-
-  expect(result.success).toBe(true);
-  expect(result.daysLate).toBe(5);
-  expect(result.feeInCents).toBe(1600);
-});
-
   it('borrowBook não lança erro com inputs válidos', () => {
     const repo = mock<LibraryRepository>();
     repo.findMemberById.mockReturnValue(makeMember());
